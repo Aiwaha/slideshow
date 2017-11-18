@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>轮播图</title>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul li {
+            list-style: none;
+        }
+
+        body {
+            position: relative;
+        }
+
+        .picture li {
+            position: absolute;
+            opacity: 0;
+            transition: opacity 1s ease;
+            /* z-index: 1;  */
+        }
+
+        .picture .current {
+            opacity: 1;
+        }
+
+        .number {
+            position: absolute;
+            top: 600px;
+            left: calc((100% - 100px) / 2);
+        }
+
+        .number li {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: gray;
+            border-radius: 50%;
+            font-size: 12px;
+            text-align: center;
+            line-height: 20px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .number .current {
+            background: orange;
+        }
+
+        .prev,
+        .next {
+            position: absolute;
+            z-index: 999;
+            opacity: 0;
+            width: 40px;
+            height: 40px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .prev img:hover,
+        .next img:hover {
+            animation: top .5s ease .2s forwards;
+        }
+
+        @keyframes top {
+            0% {
+                transform: translate(0);
+            }
+            100% {
+                transform: translate(0, -40px);
+            }
+        }
+
+        .prev {
+            top: 300px;
+            left: 20px;
+        }
+
+        .next {
+            top: 300px;
+            right: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="container">
+        <ul class="picture">
+            <li class="current"><img src="tu.jpg" alt="img"></li>
+            <li><img src="pian.jpg" alt="img"></li>
+            <li><img src="tupian.jpg" alt="img"></li>
+        </ul>
+
+        <span class="prev"><img src="large_left.png" alt=""></span>
+        <span class="next"><img src="large_right.png" alt=""></span>
+
+        <ul class="number">
+            <li class="current">1</li>
+            <li>2</li>
+            <li>3</li>
+        </ul>
+    </div>
+    <script>
+        $(function () {
+            var container = $('.container');
+            var picture = $('.picture li');
+            var number = $('.number li');
+            var prev = $('.prev');
+            var next = $('.next');
+
+            function show(i) {
+
+                for (var index = 0; index < number.length; index++) {
+                    // if (i === index) {
+                    //     // attr()设置或返回被选元素的属性值
+                    //     $(picture[index]).attr('class', 'current');
+                    //     $(number[index]).attr('class', 'current');
+                    // } else {
+                    //     $(picture[index]).attr('class', '');
+                    //     $(number[index]).attr('class', '');
+                    // }
+                    var style = (i === index ? 'current' : '')
+                    $(picture[index]).attr('class', style);
+                    $(number[index]).attr('class', style);
+                }
+            }
+            var index = 0;
+            number.each(function (i, v) {
+                $(v).on('mouseover', function () {
+                    show(i);
+                }).on('mouseout', function () {
+                    index = i;
+                })
+
+            });
+            prev.click(function(){
+                if(index >= 1 ){
+                    index--;
+                }else{
+                    index = 2;
+                }
+                show(index);
+            })
+            next.click(function(){
+                if(index == picture.length - 1){
+                    index = 0;
+                }else{
+                    index++;
+                }
+                show(index);
+            })
+
+
+            // var timer = null;
+            // function autoplay() {
+            //     timer = setInterval(function () {
+            //         show(index++);
+            //         if (index >= number.length) {
+            //             index = 0;
+            //         }
+            //     }, 2000);
+            // }
+            // autoplay();
+            // container.mouseover(function () {
+            //     clearInterval(timer);
+            // }).mouseout(function () {
+            //     autoplay();
+            // })
+
+            container.on('mouseover', function () {
+                prev.css('opacity', '1');
+                next.css('opacity', '1');
+            }).on('mouseout', function () {
+                prev.css('opacity', '0');
+                next.css('opacity', '0');
+            })
+
+
+        })
+
+       
+    </script>
+</body>
+
+</html>
